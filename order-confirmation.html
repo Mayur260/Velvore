@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Order Confirmation - VELVORÉ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--black:#000;--gold:#C6A667;--white:#fff;--charcoal:#1A1A1A}
+        *{box-sizing:border-box}
+        body{margin:0;font-family:'Poppins',sans-serif;background:var(--black);color:var(--white);}
+        .wrap{max-width:980px;margin:2.5rem auto;padding:1rem}
+        .hero{background:linear-gradient(135deg,var(--charcoal),#0f0f0f);padding:1.25rem;border-radius:12px;border:1px solid rgba(198,166,103,0.12);text-align:center}
+        h1{font-family:'Playfair Display',serif;color:var(--gold);margin:0 0 0.5rem}
+        p.lead{color:rgba(255,255,255,0.85);margin:0 0 1rem}
+        .order-box{background:#0f0f0f;padding:1rem;border-radius:10px;margin-top:1rem;border:1px solid rgba(198,166,103,0.08)}
+        .order-meta{display:flex;justify-content:space-between;gap:1rem;align-items:center}
+        .items{margin-top:1rem}
+        .item{display:flex;gap:0.75rem;padding:0.6rem 0;border-bottom:1px dashed rgba(255,255,255,0.04);align-items:center}
+        .item img{width:64px;height:48px;object-fit:cover;border-radius:6px}
+        .totals{display:flex;justify-content:space-between;padding-top:0.75rem;font-weight:700;color:var(--gold)}
+        .btn{display:inline-block;padding:0.7rem 1rem;border-radius:26px;background:var(--gold);color:var(--black);text-decoration:none;font-weight:700;margin-top:1rem}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="hero">
+            <h1>Thank you for your order</h1>
+            <p class="lead">Your order has been received. Below is a summary — a confirmation email will be sent if you provided an email address.</p>
+            <div id="orderId" style="color:rgba(255,255,255,0.8);font-weight:600"></div>
+        </div>
+
+        <div class="order-box" id="orderBox">
+            <div class="order-meta">
+                <div>
+                    <div style="color:rgba(255,255,255,0.75);font-size:0.95rem">Order</div>
+                    <div id="meta-id" style="font-weight:700;color:var(--gold)"></div>
+                </div>
+                <div>
+                    <div style="color:rgba(255,255,255,0.75);font-size:0.95rem">Placed</div>
+                    <div id="meta-date" style="font-weight:600"></div>
+                </div>
+                <div>
+                    <div style="color:rgba(255,255,255,0.75);font-size:0.95rem">Total</div>
+                    <div id="meta-total" style="font-weight:700;color:var(--gold)"></div>
+                </div>
+            </div>
+
+            <div class="items" id="orderItems"></div>
+
+            <div class="totals">
+                <div>Subtotal</div>
+                <div id="orderSubtotal">₹0</div>
+            </div>
+
+            <div style="margin-top:1rem;color:rgba(255,255,255,0.85);">
+                <strong>Shipping</strong>
+                <div id="shippingInfo" style="margin-top:0.5rem;color:rgba(255,255,255,0.8)"></div>
+            </div>
+
+            <a href="shop.html" class="btn">Back to Shop</a>
+            <a href="#" id="printBtn" class="btn" style="margin-left:0.5rem">Print Receipt</a>
+        </div>
+    </div>
+
+    <script>
+        function renderOrder(){
+            const raw = localStorage.getItem('velvore_last_order');
+            if(!raw){
+                document.getElementById('orderBox').innerHTML = '<p style="color:rgba(255,255,255,0.8)">No recent order found. <a href="shop.html">Return to shop</a>.</p>';
+                return;
+            }
+            let order = null;
+            try{ order = JSON.parse(raw); }catch(e){ order = null; }
+            if(!order){ document.getElementById('orderBox').innerHTML = '<p style="color:rgba(255,255,255,0.8)">Invalid order data.</p>'; return; }
+
+            document.getElementById('orderId').textContent = order.id || '';
+            document.getElementById('meta-id').textContent = order.id || '';
+            document.getElementById('meta-date').textContent = new Date(order.date).toLocaleString();
+            document.getElementById('meta-total').textContent = '₹' + (order.total || 0).toFixed(2);
+            document.getElementById('orderSubtotal').textContent = '₹' + (order.total || 0).toFixed(2);
+
+            const itemsNode = document.getElementById('orderItems');
+            itemsNode.innerHTML = order.items.map(it=>`
+                <div class="item">
+                    <img src="${it.image||''}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2248%22%3E%3Crect fill=%22%23C6A667%22 width=%2264%22 height=%2248%22/%3E%3C/svg%3E'">
+                    <div>
+                        <div style="font-weight:700">${it.name}</div>
+                        <div style="color:rgba(255,255,255,0.7);font-size:0.9rem">Qty: ${it.quantity} • ₹${(it.price * it.quantity).toFixed(2)}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            const shipping = order.customer ? `${order.customer.firstName||''} ${order.customer.lastName||''} — ${order.customer.address||''} ${order.customer.city||''} ${order.customer.state||''} ${order.customer.pincode||''}` : '';
+            document.getElementById('shippingInfo').textContent = shipping;
+        }
+
+        document.getElementById('printBtn').addEventListener('click', (e)=>{ e.preventDefault(); window.print(); });
+        renderOrder();
+    </script>
+</body>
+</html>

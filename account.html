@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details - VELVORÉ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #FFFFFF;
+            background: #000000;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #000000, #1A1A1A);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 2px solid #C6A667;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #C6A667;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(198, 166, 103, 0.2);
+            color: #C6A667;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(198, 166, 103, 0.3);
+        }
+
+        .back-btn:hover {
+            background: rgba(198, 166, 103, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Account Card */
+        .account-card {
+            background: #1A1A1A;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(198, 166, 103, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(198, 166, 103, 0.15);
+        }
+
+        .account-card h2 {
+            color: #C6A667;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #F5F5F5;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(198, 166, 103, 0.2);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s;
+            background: rgba(198, 166, 103, 0.05);
+            color: #FFFFFF;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #C6A667;
+        }
+
+        /* Button */
+        .btn {
+            background: #C6A667;
+            color: #000000;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            background: #E8D4B8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(198, 166, 103, 0.3);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(198, 166, 103, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(198, 166, 103, 0.2);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #C6A667, #E8D4B8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .profile-info h3 {
+            color: #C6A667;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: #F5F5F5;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(198, 166, 103, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(198, 166, 103, 0.2);
+        }
+
+        .stat-card h4 {
+            color: #C6A667;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: #F5F5F5;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .account-card {
+                padding: 1.5rem;
+            }
+
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <!-- Prefer navigating back in history; fallback to home page file used in this project -->
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        <h1>My Account</h1>
+        <p>Manage your personal information and preferences</p>
+    </div>
+
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="account-card">
+            <div class="profile-section">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <h3>Your Name</h3>
+                    <p>Premium Member since 2024</p>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>0</h4>
+                    <p>Total Orders</p>
+                </div>
+                <div class="stat-card">
+                    <h4>₹0</h4>
+                    <p>Total Spent</p>
+                </div>
+                <div class="stat-card">
+                    <h4>⭐</h4>
+                    <p>VIP Rating</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="account-card">
+            <h2>Personal Information</h2>
+            <form>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" value="Enter your First Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" value="Enter your Last Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" value="Enter your Email Address" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" value="Enter your Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" value="Enter your Date of Birth">
+                </div>
+                <button type="submit" class="btn">Update Information</button>
+            </form>
+        </div>
+
+        <!-- Address Information -->
+        <div class="account-card">
+            <h2>Address Information</h2>
+            <form>
+                <div class="form-group">
+                    <label for="address">Street Address</label>
+                    <textarea id="address" rows="3" placeholder="Enter your full address"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" value="Enter your City" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state" required>
+                        <option value="New York" selected>Select State</option>
+                        <option value="California">California</option>
+                        <option value="Florida">Florida</option>
+                        <option value="Texas">Texas</option>
+                        <option value="Nevada">Nevada</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pincode">ZIP Code</label>
+                    <input type="text" id="pincode" value="Enter your ZIP Code" required>
+                </div>
+                <button type="submit" class="btn">Update Address</button>
+            </form>
+        </div>
+
+        <!-- Preferences -->
+        <div class="account-card">
+            <h2>Preferences</h2>
+            <form>
+                <div class="form-group">
+                    <label for="newsletter">Exclusive Offers & Updates</label>
+                    <select id="newsletter">
+                        <option value="yes" selected>Yes, send me exclusive offers</option>
+                        <option value="no">No, don't send updates</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notifications">Notification Preferences</label>
+                    <select id="notifications">
+                        <option value="all" selected>All notifications</option>
+                        <option value="orders">Order updates only</option>
+                        <option value="offers">Special offers only</option>
+                        <option value="none">No notifications</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Save Preferences</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handlers
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Information updated successfully!');
+            });
+        });
+
+        // Ensure Back to Home link reliably navigates to home.html (try history.back() first)
+        (function() {
+            const backBtn = document.querySelector('.back-btn');
+            if (!backBtn) return;
+            backBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Try to go back in history if possible
+                if (window.history && window.history.length > 1) {
+                    // Use a timeout fallback: if history.back() doesn't navigate (e.g. single-page interception), fallback to home.html
+                    let fallbackCalled = false;
+                    const fallback = () => {
+                        if (fallbackCalled) return;
+                        fallbackCalled = true;
+                        window.location.href = 'index.html';
+                    };
+                    // If history.back doesn't trigger a navigation quickly, we fallback after 300ms
+                    const t = setTimeout(fallback, 300);
+                    try {
+                        window.history.back();
+                    } catch (err) {
+                        clearTimeout(t);
+                        fallback();
+                    }
+                    // Clear fallback if page unload/navigation happens
+                    window.addEventListener('unload', () => clearTimeout(t));
+                } else {
+                    // No history — go to the site's home file
+                    window.location.href = 'index.html';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

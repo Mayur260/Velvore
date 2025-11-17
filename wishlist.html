@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - VELVORÉ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #FFFFFF;
+            background: #000000;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #000000, #1A1A1A);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 2px solid #C6A667;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #C6A667;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(198, 166, 103, 0.2);
+            color: #C6A667;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(198, 166, 103, 0.3);
+        }
+
+        .back-btn:hover {
+            background: rgba(198, 166, 103, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .wishlist-card {
+                background: #1A1A1A;
+            border-radius: 15px;
+            overflow: hidden;
+                box-shadow: 0 4px 20px rgba(198, 166, 103, 0.1);
+            transition: transform 0.3s;
+            position: relative;
+                border: 1px solid rgba(198, 166, 103, 0.15);
+        }
+
+        .wishlist-card:hover {
+                background: #E8D4B8;
+                box-shadow: 0 6px 25px rgba(198, 166, 103, 0.15);
+                box-shadow: 0 5px 15px rgba(198, 166, 103, 0.3);
+    }
+
+        .wishlist-image {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            display: block;
+            background: rgba(198, 166, 103, 0.04);
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .wishlist-content {
+            padding: 1.5rem;
+                font-family: 'Poppins', sans-serif;
+        }
+
+        .wishlist-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+                background: rgba(198, 166, 103, 0.2);
+            }
+
+        .wishlist-price {
+                color: #C6A667;
+                font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+                color: #F5F5F5;
+    }
+
+        .wishlist-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .add-to-cart {
+            flex: 2;
+                background: #C6A667;
+                color: #000000;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+                font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+                background: #E8D4B8;
+            transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(198, 166, 103, 0.3);
+        }
+
+        .remove-btn {
+            flex: 1;
+                background: rgba(198, 166, 103, 0.1);
+                color: #C6A667;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+                background: rgba(198, 166, 103, 0.2);
+                color: #E8D4B8;
+        }
+
+        .empty-wishlist {
+            text-align: center;
+            padding: 4rem 2rem;
+                color: #F5F5F5;
+        }
+
+        .empty-wishlist h2 {
+                color: #C6A667;
+            margin-bottom: 1rem;
+        }
+
+        .shop-now-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: #4C6E4E;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .shop-now-btn:hover {
+            background: #3d5940;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 110, 78, 0.2);
+        }
+
+        .stock-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .in-stock {
+            color: #2a5a2d;
+        }
+
+        .low-stock {
+            color: #855a1f;
+            background: #fff3e0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="home.html" class="back-btn">← Back to Home</a>
+        <h1>My Wishlist</h1>
+    </div>
+
+    <div class="container">
+        <div class="wishlist-grid">
+            <!-- Wishlist: Watch -->
+            <div class="wishlist-card">
+                <span class="stock-status in-stock">In Stock</span>
+                <img src="https://www.omegawatches.com/media/catalog/product/o/m/omega-seamaster-diver-300m-co-axial-master-chronometer-42-mm-21062422001003-a55060.png?w=700" alt="Omega Seamaster" class="wishlist-image">
+                <div class="wishlist-content">
+                    <div class="wishlist-name">Omega Seamaster Diver 300M</div>
+                    <div class="wishlist-price">₹33,000</div>
+                    <div class="wishlist-actions">
+                        <button class="add-to-cart" onclick="addToCart('omega-seamaster')">Add to Cart</button>
+                        <button class="remove-btn" onclick="removeFromWishlist('omega-seamaster')">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wishlist: Sunglasses -->
+            <div class="wishlist-card">
+                <span class="stock-status low-stock">Low Stock</span>
+                <img src="https://blog.favrspecs.com/wp-content/uploads/2021/10/Robert-La-Roche-_Best_Luxury_Sunglasses_Brands_FAVR2.jpg" alt="Robert La Roche Sunglasses" class="wishlist-image">
+                <div class="wishlist-content">
+                    <div class="wishlist-name">Robert La Roche Mule</div>
+                    <div class="wishlist-price">₹490</div>
+                    <div class="wishlist-actions">
+                        <button class="add-to-cart" onclick="addToCart('robert-la-roche-mule')">Add to Cart</button>
+                        <button class="remove-btn" onclick="removeFromWishlist('robert-la-roche-mule')">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty wishlist state (hidden by default) -->
+        <div class="empty-wishlist" style="display: none;">
+            <h2>Your Wishlist is Empty</h2>
+            <p>Browse our products and add your favorites to the wishlist!</p>
+            <a href="home.html" class="shop-now-btn">Shop Now</a>
+        </div>
+    </div>
+
+    <script>
+        // Simple cart helpers using the same localStorage key used elsewhere
+        const CART_KEY = 'velvore_cart';
+        const getCart = () => JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        const saveCart = (c) => localStorage.setItem(CART_KEY, JSON.stringify(c));
+
+        function addToCart(productId) {
+            // Find the button and its card to read metadata
+            const btn = document.querySelector(`button[onclick*="${productId}"]`);
+            if (!btn) return;
+            const card = btn.closest('.wishlist-card');
+            const name = (card.querySelector('.wishlist-name') || {}).textContent || productId;
+            const priceText = (card.querySelector('.wishlist-price') || {}).textContent || '';
+            const price = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
+
+            const cart = getCart();
+            const existing = cart.find(i => i.id === productId);
+            if (existing) {
+                existing.qty = (existing.qty || 1) + 1;
+            } else {
+                cart.push({ id: productId, name: name.trim(), price: price, qty: 1 });
+            }
+            saveCart(cart);
+
+            // update any visible cart count on this page
+            try {
+                const totalQty = cart.reduce((s, it) => s + (it.qty || 1), 0);
+                const cartCountEl = document.getElementById('cart-count');
+                if (cartCountEl) {
+                    cartCountEl.dataset.count = totalQty;
+                    cartCountEl.setAttribute('aria-label', `Cart has ${totalQty} items`);
+                    cartCountEl.textContent = 'Cart';
+                }
+            } catch (e) { /* ignore UI update errors */ }
+
+            // if a cart drawer exists on the page, try to open and refresh it
+            try {
+                const drawer = document.getElementById('cart-drawer');
+                if (drawer) {
+                    drawer.classList.add('open');
+                    drawer.setAttribute('aria-hidden','false');
+                    if (typeof renderCart === 'function') renderCart();
+                }
+            } catch (e) {}
+
+            // simple UI feedback on the button
+            const prev = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Added ✓';
+            setTimeout(() => { btn.disabled = false; btn.textContent = prev; }, 1200);
+
+            // small toast confirmation
+            (function showToast(msg){
+                let t = document.querySelector('.velvore-toast');
+                if (!t) {
+                    t = document.createElement('div');
+                    t.className = 'velvore-toast';
+                    t.style.position = 'fixed';
+                    t.style.right = '1rem';
+                    t.style.bottom = '1rem';
+                    t.style.background = 'rgba(0,0,0,0.8)';
+                    t.style.color = '#fff';
+                    t.style.padding = '0.6rem 1rem';
+                    t.style.borderRadius = '8px';
+                    t.style.boxShadow = '0 6px 18px rgba(0,0,0,0.6)';
+                    t.style.fontFamily = 'Poppins, sans-serif';
+                    t.style.zIndex = 9999;
+                    document.body.appendChild(t);
+                }
+                t.textContent = msg;
+                t.style.opacity = '1';
+                setTimeout(()=>{ t.style.transition = 'opacity 400ms'; t.style.opacity = '0'; }, 900);
+            })(`Added ${name.trim()} to cart`);
+        }
+
+        function removeFromWishlist(productId) {
+            const el = document.querySelector(`[onclick*="${productId}"]`);
+            if (!el) return;
+            const card = el.closest('.wishlist-card');
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.remove();
+                checkEmptyWishlist();
+            }, 300);
+        }
+
+        function checkEmptyWishlist() {
+            const wishlistGrid = document.querySelector('.wishlist-grid');
+            const emptyWishlist = document.querySelector('.empty-wishlist');
+            if (!wishlistGrid) return;
+            if (wishlistGrid.children.length === 0) {
+                wishlistGrid.style.display = 'none';
+                if (emptyWishlist) emptyWishlist.style.display = 'block';
+            }
+        }
+
+        // Check for empty wishlist on page load
+        window.addEventListener('load', checkEmptyWishlist);
+    </script>
+</body>
+</html>

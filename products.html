@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Products - VELVORÉ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --black: #000000;
+            --gold: #C6A667;
+            --white: #FFFFFF;
+            --charcoal: #1A1A1A;
+            --card: #F5F5F5;
+            --transition: 240ms cubic-bezier(.2,.9,.3,1);
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0; font-family:'Poppins',sans-serif; background:var(--black); color:var(--white);
+            -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            padding-bottom:4rem;
+        }
+        header{
+            display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(198,166,103,0.08);
+            background:linear-gradient(180deg,var(--black),var(--charcoal));
+        }
+        .brand{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);letter-spacing:0.6px}
+        .sub{color:rgba(255,255,255,0.7);font-size:0.9rem}
+
+        .container{max-width:1200px;margin:2rem auto;padding:0 1rem}
+        .page-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:2rem;margin:1rem 0}
+
+        /* Grid */
+        .grid{display:grid;grid-template-columns:1fr;gap:1.25rem}
+        @media(min-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+        @media(min-width:992px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+        /* Card */
+        .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.18);border:1px solid rgba(0,0,0,0.06);
+            transform:translateY(0);transition:transform var(--transition),box-shadow var(--transition);display:flex;flex-direction:column;
+        }
+        .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(198,166,103,0.12)}
+
+        .media{height:180px;background:linear-gradient(135deg, rgba(198,166,103,0.08), rgba(0,0,0,0.02));display:flex;align-items:center;justify-content:center}
+        .media img{width:100%;height:100%;object-fit:cover;display:block}
+
+        .content{padding:1rem 1rem 1.25rem;display:flex;flex-direction:column;gap:0.6rem}
+        .name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--charcoal);transition:color var(--transition)}
+        .subtitle{font-size:0.9rem;color:rgba(0,0,0,0.6)}
+
+        .price{font-weight:700;color:var(--gold);font-size:1rem;transition:color var(--transition)}
+
+        .actions{display:flex;gap:0.6rem;margin-top:auto}
+        .btn{border:none;padding:0.6rem 0.9rem;border-radius:28px;font-weight:600;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:0.6rem}
+        .add{background:var(--gold);color:var(--black)}
+        .add:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(198,166,103,0.16)}
+
+        .wishlist-btn{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:0.45rem;border-radius:50%;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow var(--transition),transform var(--transition)}
+    .wishlist-btn:hover{box-shadow:0 6px 18px rgba(198,166,103,0.14), 0 0 12px rgba(198,166,103,0.08);transform:translateY(-3px)}
+    .wishlist-btn svg{width:18px;height:18px;fill:transparent;stroke:var(--charcoal);stroke-width:1.5;transition:fill var(--transition),stroke var(--transition),filter var(--transition)}
+    .wishlist-btn.active{box-shadow:0 10px 30px rgba(198,166,103,0.16);}
+    .wishlist-btn.active svg{fill:var(--gold);stroke:var(--gold);filter:drop-shadow(0 4px 12px rgba(198,166,103,0.12))}
+
+        /* cart drawer */
+        .cart-drawer {
+            position:fixed;top:0;right:0;height:100%;width:360px;max-width:92vw;background:linear-gradient(180deg,var(--charcoal),#0f0f0f);box-shadow:-20px 0 60px rgba(0,0,0,0.6);transform:translateX(110%);transition:transform 360ms cubic-bezier(.2,.9,.3,1);z-index:1200;display:flex;flex-direction:column;padding:1rem}
+        .cart-drawer.open{transform:translateX(0)}
+        .cart-drawer header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem}
+        .cart-items{overflow:auto;flex:1;display:flex;flex-direction:column;gap:0.75rem;padding-right:0.25rem}
+        .cart-item{display:flex;gap:0.6rem;align-items:center;padding:0.5rem;border-radius:8px;background:rgba(255,255,255,0.02)}
+        .cart-item img{width:64px;height:48px;object-fit:cover;border-radius:6px}
+        .cart-item .meta{flex:1}
+        .qty-controls{display:flex;gap:0.4rem;align-items:center}
+        .qty-controls button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white);padding:0.25rem 0.5rem;border-radius:6px;cursor:pointer}
+        .cart-total{padding-top:0.75rem;border-top:1px dashed rgba(255,255,255,0.04);margin-top:0.5rem;display:flex;justify-content:space-between;align-items:center}
+        .cart-actions{display:flex;gap:0.6rem;margin-top:0.75rem}
+
+        /* hover effect for name or price */
+        .card:hover .name,.card:hover .price{color:var(--gold)}
+
+        /* fade-in animation */
+        .fade-in{opacity:0;transform:translateY(8px);animation:fadeInUp 420ms ease forwards}
+        @keyframes fadeInUp{to{opacity:1;transform:none}}
+
+        /* counters / tray */
+        .top-bar{display:flex;gap:1rem;align-items:center}
+        .count{background:rgba(198,166,103,0.12);color:var(--gold);padding:0.4rem 0.6rem;border-radius:20px;font-weight:600}
+
+        footer{max-width:1200px;margin:2rem auto;color:rgba(255,255,255,0.6);text-align:center;padding:1rem}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand">VELVORÉ</div>
+        <div class="top-bar">
+            <div class="sub">Watches · Sunglasses · Wallets</div>
+            <div style="display:flex;align-items:center;gap:0.6rem">
+                <!-- cart icon removed (use 'Cart' label to open) -->
+                 <div class="count" id="cart-count" role="button" aria-label="Cart">Cart</div>
+                 <div class="count" id="wish-count" role="button" aria-label="Wishlist">Wishlist</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Curated Collection</h1>
+        <p style="color:rgba(255,255,255,0.7);margin-bottom:1rem">An edited selection of premium watches, sunglasses and wallets. Minimal, premium, and timeless.</p>
+
+        <section class="grid" id="product-grid" aria-live="polite"></section>
+    </main>
+
+        <!-- About section -->
+        <section style="margin-top:2.5rem;">
+            <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(198,166,103,0.02));border-radius:12px;padding:1.25rem;">
+                <h2 style="font-family: 'Playfair Display', serif; color:var(--gold); margin:0 0 0.5rem; font-size:1.4rem">About VELVORÉ</h2>
+                <p style="margin:0;color:rgba(255,255,255,0.85);line-height:1.6">VELVORÉ curates classic accessories crafted with precision and refined materials. Our collection blends timeless silhouettes with contemporary details — forged for those who appreciate subtle luxury. Each piece carries a quiet confidence: quality, heritage, and modern utility.</p>
+            </div>
+        </section>
+
+        <!-- Post-products section (collections / craft) -->
+        <section style="margin-top:1.75rem;">
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <div style="background:var(--charcoal);padding:1rem;border-radius:10px;display:flex;flex-direction:column;gap:0.5rem;">
+                    <h3 style="font-family:'Playfair Display',serif;color:var(--gold);margin:0;font-size:1.1rem">The Craft</h3>
+                    <p style="margin:0;color:rgba(255,255,255,0.75);">From hand-stitched leather to precision watchmaking, our small-batch production emphasizes durability and detail. Discover the techniques behind each collection and how we elevate everyday objects into enduring companions.</p>
+                </div>
+            </div>
+        </section>
+
+    <!-- Cart drawer -->
+    <aside class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Shopping cart" aria-hidden="true">
+        <header>
+            <strong style="font-family:'Playfair Display',serif;color:var(--gold)">Your Cart</strong>
+            <button id="close-cart" aria-label="Close cart" style="background:transparent;border:none;color:var(--white);font-size:1.2rem;cursor:pointer">✕</button>
+        </header>
+        <div class="cart-items" id="cart-items">
+            <!-- items render here -->
+        </div>
+        <div class="cart-total">
+            <div style="color:rgba(255,255,255,0.9)">Total</div>
+            <div id="cart-total-amount" style="color:var(--gold);font-weight:700">₹0</div>
+        </div>
+        <div class="cart-actions">
+            <button id="checkout-btn" class="btn add" style="width:100%">Checkout</button>
+        </div>
+    </aside>
+
+    <footer>© <span id="year"></span> VELVORÉ — Crafted for a timeless life.</footer>
+
+    <script>
+        // Sample products (15 items)
+        const PRODUCTS = [
+            {id:'w1',name:'Heritage Chronograph',subtitle:'Automatic 42mm • Steel',price:2450,category:'Watch',img:'https://via.placeholder.com/600x400?text=Heritage+Chronograph'},
+            {id:'w2',name:'Midnight Diver',subtitle:'300m • Ceramic Bezel',price:3290,category:'Watch',img:'https://via.placeholder.com/600x400?text=Midnight+Diver'},
+            {id:'w3',name:'Aurum Classic',subtitle:'Slim Dress • Gold Plated',price:1990,category:'Watch',img:'https://via.placeholder.com/600x400?text=Aurum+Classic'},
+            {id:'w4',name:'Riviera Pilot',subtitle:'GMT • Sapphire',price:2750,category:'Watch',img:'https://via.placeholder.com/600x400?text=Riviera+Pilot'},
+            {id:'s1',name:'Obsidian Aviator',subtitle:'Polarized • Titanium',price:680,category:'Sunglasses',img:'https://via.placeholder.com/600x400?text=Obsidian+Aviator'},
+            {id:'s2',name:'Eclipse Round',subtitle:'UV400 • Acetate',price:420,category:'Sunglasses',img:'https://via.placeholder.com/600x400?text=Eclipse+Round'},
+            {id:'s3',name:'Noir Shield',subtitle:'Wrap • Carbon',price:540,category:'Sunglasses',img:'https://via.placeholder.com/600x400?text=Noir+Shield'},
+            {id:'s4',name:'Solstice Classic',subtitle:'Vintage • Tortoise',price:360,category:'Sunglasses',img:'https://via.placeholder.com/600x400?text=Solstice+Classic'},
+            {id:'b1',name:'Signature Leather Wallet',subtitle:'Italian Leather • Bifold',price:320,category:'Wallet',img:'https://via.placeholder.com/600x400?text=Signature+Wallet'},
+            {id:'b2',name:'Minimal Cardholder',subtitle:'Slim • Pebbled',price:140,category:'Wallet',img:'https://via.placeholder.com/600x400?text=Cardholder'},
+            {id:'b3',name:'Traveler Folio',subtitle:'Passport • RFID',price:210,category:'Wallet',img:'https://via.placeholder.com/600x400?text=Traveler+Folio'},
+            {id:'b4',name:'Nappa Coin Pouch',subtitle:'Soft Grain • Compact',price:95,category:'Wallet',img:'https://via.placeholder.com/600x400?text=Coin+Pouch'},
+            {id:'w5',name:'Velvet Racing',subtitle:'Chrono • Racing Dial',price:1580,category:'Watch',img:'https://via.placeholder.com/600x400?text=Velvet+Racing'},
+            {id:'s5',name:'Horizon Square',subtitle:'Geometric • Vintage',price:490,category:'Sunglasses',img:'https://via.placeholder.com/600x400?text=Horizon+Square'},
+            {id:'b5',name:'Executive Slim',subtitle:'Travel • Multi-slot',price:260,category:'Wallet',img:'https://via.placeholder.com/600x400?text=Executive+Slim'}
+        ];
+
+        // localStorage helpers
+        const CART_KEY = 'velvore_cart';
+        const WISH_KEY = 'velvore_wishlist';
+
+        const getCart = ()=> JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        const saveCart = (c)=> localStorage.setItem(CART_KEY, JSON.stringify(c));
+        const getWish = ()=> JSON.parse(localStorage.getItem(WISH_KEY) || '[]');
+        const saveWish = (w)=> localStorage.setItem(WISH_KEY, JSON.stringify(w));
+
+        // UI refs
+        const grid = document.getElementById('product-grid');
+        const cartCount = document.getElementById('cart-count');
+        const wishCount = document.getElementById('wish-count');
+
+        function updateCounts(){
+            // Show total items in cart (sum of quantities)
+            const totalQty = getCart().reduce((s,item)=> s + (item.qty || 1), 0);
+                // keep label text static, expose count via data attribute and aria-label for accessibility
+                cartCount.dataset.count = totalQty;
+                cartCount.setAttribute('aria-label', `Cart has ${totalQty} items`);
+                cartCount.textContent = 'Cart';
+
+                const wishLen = getWish().length;
+                wishCount.dataset.count = wishLen;
+                wishCount.setAttribute('aria-label', `${wishLen} items in wishlist`);
+                wishCount.textContent = 'Wishlist';
+        }
+
+        function render(){
+            grid.innerHTML = '';
+            const wish = getWish();
+            PRODUCTS.forEach((p,i)=>{
+                const card = document.createElement('article');
+                card.className = 'card fade-in';
+                card.style.animationDelay = (i * 50) + 'ms';
+
+                card.innerHTML = `
+                    <div class="media">
+                        <img loading="lazy" src="${p.img}" alt="${p.name}"/>
+                    </div>
+                    <div class="content">
+                        <div class="name">${p.name}</div>
+                        <div class="subtitle">${p.subtitle}</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                            <div class="price">₹${p.price.toLocaleString()}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn add" data-id="${p.id}">Add to cart</button>
+                            <button class="wishlist-btn ${wish.includes(p.id)?'active':''}" aria-label="Add to wishlist" aria-pressed="${wish.includes(p.id)?'true':'false'}" data-id="${p.id}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.35-9.5-7.05C-0.4 10.55 2 7 5 7c1.5 0 2.5.9 3 1.6C8.5 7.9 9.5 7 11 7c3 0 5.4 3.55 2.5 6.95C19 16.65 12 21 12 21z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // add to cart behavior: first click reveals qty controls, confirm adds with qty and shows View Cart
+                (function bindAddBehavior(){
+                    const addBtn = card.querySelector('.add');
+                    const actions = card.querySelector('.actions');
+                    let qty = 1;
+
+                    function renderQtyUI(){
+                        actions.innerHTML = `
+                            <div style="display:flex;align-items:center;gap:0.5rem">
+                                <button class="qty-dec-inline" type="button" style="padding:0.35rem 0.6rem;border-radius:8px;background:transparent;border:1px solid rgba(0,0,0,0.06);">−</button>
+                                <span class="qty-display-inline" style="min-width:24px;text-align:center;display:inline-block">${qty}</span>
+                                <button class="qty-inc-inline" type="button" style="padding:0.35rem 0.6rem;border-radius:8px;background:transparent;border:1px solid rgba(0,0,0,0.06);">+</button>
+                                <button class="btn confirm-add" style="margin-left:0.6rem;background:var(--gold);color:var(--black);">Add to cart</button>
+                            </div>
+                        `;
+
+                        const dec = actions.querySelector('.qty-dec-inline');
+                        const inc = actions.querySelector('.qty-inc-inline');
+                        const display = actions.querySelector('.qty-display-inline');
+                        const confirm = actions.querySelector('.confirm-add');
+
+                        dec.addEventListener('click', ()=>{ qty = Math.max(1, qty - 1); display.textContent = qty; });
+                        inc.addEventListener('click', ()=>{ qty = qty + 1; display.textContent = qty; });
+                        confirm.addEventListener('click', ()=>{
+                            const cart = getCart();
+                            const existing = cart.find(ci => ci.id === p.id);
+                            if(existing){ existing.qty = (existing.qty || 1) + qty; }
+                            else { cart.push({id:p.id,name:p.name,price:p.price,qty:qty}); }
+                            saveCart(cart); updateCounts();
+                            // replace with View Cart
+                            actions.innerHTML = `<button class="btn view-cart" style="background:var(--gold);color:var(--black);width:100%">View cart</button>`;
+                            const view = actions.querySelector('.view-cart');
+                            view.addEventListener('click', ()=>{ openCart(); });
+                        });
+                    }
+
+                    addBtn.addEventListener('click', ()=>{
+                        // if actions already contains view-cart, open cart
+                        if(actions.querySelector('.view-cart')){ openCart(); return; }
+                        renderQtyUI();
+                    });
+                })();
+
+                // wishlist toggle
+                const wishBtn = card.querySelector('.wishlist-btn');
+                // ensure aria-pressed initial state
+                wishBtn.setAttribute('aria-pressed', getWish().includes(p.id) ? 'true' : 'false');
+                wishBtn.addEventListener('click', ()=>{
+                    const id = wishBtn.dataset.id;
+                    let list = getWish();
+                    if(list.includes(id)){
+                        list = list.filter(x=>x!==id);
+                        wishBtn.classList.remove('active');
+                        wishBtn.setAttribute('aria-pressed','false');
+                    } else {
+                        list.push(id);
+                        wishBtn.classList.add('active');
+                        wishBtn.setAttribute('aria-pressed','true');
+                    }
+                    saveWish(list);
+                    updateCounts();
+                });
+
+                grid.appendChild(card);
+            });
+            updateCounts();
+        }
+
+        // init
+        document.getElementById('year').textContent = new Date().getFullYear();
+        // Ensure default arrays exist
+        if(!localStorage.getItem(CART_KEY)) saveCart([]);
+        if(!localStorage.getItem(WISH_KEY)) saveWish([]);
+        render();
+
+        // header counts: make them actionable
+        cartCount.style.cursor = 'pointer';
+        wishCount.style.cursor = 'pointer';
+        cartCount.addEventListener('click', ()=> openCart());
+        wishCount.addEventListener('click', ()=> { window.location.href = 'wishlist.html'; });
+
+        // Cart drawer functionality
+        const drawer = document.getElementById('cart-drawer');
+        const closeBtn = document.getElementById('close-cart');
+        const cartItemsNode = document.getElementById('cart-items');
+        const cartTotalAmount = document.getElementById('cart-total-amount');
+
+        function openCart(){
+            drawer.classList.add('open');
+            drawer.setAttribute('aria-hidden','false');
+            renderCart();
+        }
+        function closeCart(){
+            drawer.classList.remove('open');
+            drawer.setAttribute('aria-hidden','true');
+        }
+
+        // open-cart button removed; cart opens via clicking the Cart label/count
+        closeBtn.addEventListener('click', closeCart);
+
+        // render cart drawer
+        function renderCart(){
+            const cart = getCart();
+            cartItemsNode.innerHTML = '';
+            if(cart.length === 0){
+                cartItemsNode.innerHTML = '<div style="padding:1rem;color:rgba(255,255,255,0.8)">Your cart is empty.</div>';
+                cartTotalAmount.textContent = '₹0';
+                return;
+            }
+            let total = 0;
+            cart.forEach(item=>{
+                const prod = PRODUCTS.find(p=>p.id===item.id) || {};
+                const row = document.createElement('div');
+                row.className = 'cart-item';
+                const subtotal = (item.qty || 1) * (item.price || 0);
+                total += subtotal;
+                row.innerHTML = `
+                    <img src="${prod.img||''}" alt="${prod.name||''}">
+                    <div class="meta">
+                        <div style="font-family:'Playfair Display',serif;color:var(--gold)">${prod.name||item.name}</div>
+                        <div style="font-size:0.85rem;color:rgba(255,255,255,0.7)">₹${(item.price||0).toLocaleString()} • <span style="font-weight:600">Qty: <span class="qty">${item.qty||1}</span></span></div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem">
+                        <div class="qty-controls">
+                            <button class="qty-dec" data-id="${item.id}">-</button>
+                            <button class="qty-inc" data-id="${item.id}">+</button>
+                        </div>
+                        <button class="remove-item" data-id="${item.id}" style="background:transparent;border:none;color:rgba(255,255,255,0.6);cursor:pointer">Remove</button>
+                    </div>
+                `;
+
+                // attach handlers after append
+                cartItemsNode.appendChild(row);
+            });
+            cartTotalAmount.textContent = `₹${total.toLocaleString()}`;
+
+            // attach delegated handlers
+            cartItemsNode.querySelectorAll('.qty-inc').forEach(b=>b.addEventListener('click', ()=>{
+                const id = b.dataset.id;
+                const cart = getCart();
+                const it = cart.find(x=>x.id===id);
+                if(it){ it.qty = (it.qty||1) + 1; saveCart(cart); renderCart(); updateCounts(); }
+            }));
+            cartItemsNode.querySelectorAll('.qty-dec').forEach(b=>b.addEventListener('click', ()=>{
+                const id = b.dataset.id;
+                const cart = getCart();
+                const it = cart.find(x=>x.id===id);
+                if(it){ it.qty = Math.max(1,(it.qty||1) - 1); saveCart(cart); renderCart(); updateCounts(); }
+            }));
+            cartItemsNode.querySelectorAll('.remove-item').forEach(b=>b.addEventListener('click', ()=>{
+                const id = b.dataset.id;
+                let cart = getCart();
+                cart = cart.filter(x=>x.id!==id);
+                saveCart(cart); renderCart(); updateCounts();
+            }));
+        }
+
+        // Checkout: navigate to checkout page (checkout page will read localStorage)
+        document.getElementById('checkout-btn').addEventListener('click', ()=>{
+            if(getCart().length === 0){
+                alert('Your cart is empty. Add items before checking out.');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        });
+    </script>
+</body>
+</html>

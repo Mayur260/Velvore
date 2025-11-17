@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - VELVORÉ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #FFFFFF;
+            background: #000000;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #000000, #1A1A1A);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 2px solid #C6A667;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #C6A667;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(198, 166, 103, 0.2);
+            color: #C6A667;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(198, 166, 103, 0.3);
+        }
+
+        .back-btn:hover {
+            background: rgba(198, 166, 103, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .order-card {
+            background: #1A1A1A;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(198, 166, 103, 0.1);
+            transition: transform 0.3s;
+            border: 1px solid rgba(198, 166, 103, 0.15);
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(198, 166, 103, 0.15);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(198, 166, 103, 0.2);
+        }
+
+        .order-date {
+            color: #F5F5F5;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(198, 166, 103, 0.2);
+            color: #C6A667;
+        }
+
+        .status-delivered {
+            background: rgba(76, 186, 111, 0.2);
+            color: #4CBA6F;
+        }
+
+        .status-processing {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+        }
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-price {
+            color: #C6A667;
+            font-weight: 600;
+        }
+
+        .order-total {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(198, 166, 103, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reorder-btn {
+            background: #C6A667;
+            color: #000000;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .reorder-btn:hover {
+            background: #E8D4B8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(198, 166, 103, 0.3);
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #F5F5F5;
+        }
+
+        .no-orders h2 {
+            color: #4C6E4E;
+            margin-bottom: 1rem;
+        }
+
+        .shop-now-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: #4C6E4E;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .shop-now-btn:hover {
+            background: #3d5940;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 110, 78, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        <h1>Order History</h1>
+    </div>
+
+    <div class="container">
+        <div class="order-list">
+            <!-- Example order with items -->
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h3>Order #2025102401</h3>
+                        <span class="order-date">October 24, 2025</span>
+                    </div>
+                    <span class="order-status status-delivered">Delivered</span>
+                </div>
+                <div class="order-items">
+                    <div class="order-item">
+                        <img loading="lazy" src="https://www.omegawatches.com/media/catalog/product/o/m/omega-seamaster-diver-300m-co-axial-master-chronometer-42-mm-21062422001003-a55060.png?w=700" alt="Omega Seamaster" class="item-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80?text=Watch'">
+                        <div class="item-details">
+                            <div class="item-name">Omega Seamaster Diver 300M</div>
+                            <div class="item-quantity">Quantity: 1</div>
+                            <div class="item-price">₹250,000</div>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <img loading="lazy" src="https://blog.favrspecs.com/wp-content/uploads/2021/10/Robert-La-Roche-_Best_Luxury_Sunglasses_Brands_FAVR2.jpg" alt="Robert La Roche Sunglasses" class="item-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80?text=Sunnies'">
+                        <div class="item-details">
+                            <div class="item-name">Robert La Roche Mule Sunglasses</div>
+                            <div class="item-quantity">Quantity: 1</div>
+                            <div class="item-price">₹35,000</div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="order-total">
+                    <div>
+                        <strong>Total:</strong> ₹330,000
+                    </div>
+                    <button class="reorder-btn" onclick="reorderItems(2025102401)">Reorder Items</button>
+                </div>
+            </div>
+
+            <!-- Another example order -->
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h3>Order #2025102302</h3>
+                        <span class="order-date">October 23, 2025</span>
+                    </div>
+                    <span class="order-status status-processing">Processing</span>
+                </div>
+                <div class="order-items">
+                    <div class="order-item">
+                        <img loading="lazy" src="https://www.louisvuitton.com/images/is/image/lv/1/BLANC/1/intro_brazza_wallet.jpg" alt="Louis Vuitton Brazza" class="item-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80?text=Wallet'">
+                        <div class="item-details">
+                            <div class="item-name">Louis Vuitton Brazza Wallet</div>
+                            <div class="item-quantity">Quantity: 1</div>
+                            <div class="item-price">₹75,000</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-total">
+                    <div>
+                        <strong>Total:</strong> ₹75,000
+                    </div>
+                    <button class="reorder-btn" onclick="reorderItems(2025102302)">Reorder Items</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- No orders state (hidden by default) -->
+        <div class="no-orders" style="display: none;">
+            <h2>No Orders Yet</h2>
+            <p>You haven't placed any orders yet. Start shopping to see your order history here!</p>
+            <a href="index.html#products" class="shop-now-btn">Shop Now</a>
+        </div>
+    </div>
+
+    <script>
+        function reorderItems(orderId) {
+            // In a real implementation, this would:
+            // 1. Fetch the order details from backend
+            // 2. Add items to cart
+            // 3. Open the cart panel
+            alert(`Reordering items from order #${orderId}`);
+            window.location.href = 'index.html#products';
+        }
+
+        // Show/hide no orders state based on order list
+        window.addEventListener('load', function() {
+            const orderList = document.querySelector('.order-list');
+            const noOrders = document.querySelector('.no-orders');
+            
+            if (orderList.children.length === 0) {
+                orderList.style.display = 'none';
+                noOrders.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
